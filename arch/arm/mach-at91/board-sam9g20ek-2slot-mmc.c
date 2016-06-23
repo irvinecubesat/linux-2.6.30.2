@@ -115,17 +115,16 @@ static struct atmelspimux spi_transceiver_mux[] = {
  * SPI devices.
  */
 static struct spi_board_info ek_spi_devices[] = {
-   
 	{	// Transceiver spidev
 		// .modalias	= "spidev",
-		.modalias	= "AX5042",
+		.modalias	= "xra1405",
       //.controller_data = &spi_transceiver_mux[0],
       .controller_data = NULL, 
 		.chip_select	= 0,
 		.max_speed_hz	= 10 * 1000 * 1000,
 		.bus_num	= 1,
       // .irq = AT91_PIN_PC2,
-      .irq = 29,
+                .irq = 29,
 	},
 	{	// Transceiver spidev
 		.modalias	= "spidev",

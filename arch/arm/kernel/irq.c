@@ -157,6 +157,7 @@ void set_irq_flags(unsigned int irq, unsigned int iflags)
 		desc->status &= ~IRQ_NOAUTOEN;
 	spin_unlock_irqrestore(&desc->lock, flags);
 }
+EXPORT_SYMBOL(set_irq_flags);
 
 void __init init_IRQ(void)
 {
