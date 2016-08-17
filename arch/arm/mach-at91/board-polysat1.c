@@ -724,9 +724,18 @@ static struct pca953x_platform_data pca9535 = {
 	.invert		= 0,
 };
 
+static int ax5042_setup_nandcs(struct i2c_client *client,
+    unsigned gpio, unsigned ngpio, void *context)
+{
+   printk("pca9535 NAND Switch expander set up\n");
+   return 0;
+}
+
 static struct pca953x_platform_data ax5042_pca9535 = {
 	.gpio_base	= 220,
 	.invert		= 0,
+	.context	= (void*)8,
+	.setup		= &ax5042_setup_nandcs,
 };
 
 static struct i2c_board_info __initdata ek_i2c_devices[] = {
