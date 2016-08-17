@@ -728,7 +728,7 @@ static struct pca953x_platform_data pca9535 = {
 static int ax5042_setup_nandcs(struct i2c_client *client,
     unsigned gpio, unsigned ngpio, void *context)
 {
-   unsigned num = gpio + (intptr_t)context;
+   unsigned num = gpio + (uintptr_t)context;
 
    at91_set_GPIO_periph(AT91_PIN_PC10, 0);
    at91_set_GPIO_periph(AT91_PIN_PC14, 0);
