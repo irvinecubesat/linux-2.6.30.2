@@ -40,6 +40,7 @@
 
 #include <mach/board.h>
 #include <mach/gpio.h>
+#include <linux/gpio.h>
 #include <linux/gpio_keys.h>
 #include <linux/input.h>
 #include <mach/at91sam9_smc.h>
@@ -557,9 +558,9 @@ static struct atmel_nand_data __initdata ek_nand_data = {
 	.cle		= 22,
 	.rdy_pin	= AT91_PIN_PC13,
         // irq2 pin
-	.enable_pin	= AT91_PIN_PC14,
+	// .enable_pin	= AT91_PIN_PC14,
         // non-irq2 pin
-	// .enable_pin	= AT91_PIN_PC10,
+	.enable_pin	= AT91_PIN_PC10,
 	.partition_info	= nand_partitions,
 #if defined(CONFIG_MTD_NAND_ATMEL_BUSWIDTH_16)
 	.bus_width_16	= 1,
@@ -727,7 +728,15 @@ static struct pca953x_platform_data pca9535 = {
 static int ax5042_setup_nandcs(struct i2c_client *client,
     unsigned gpio, unsigned ngpio, void *context)
 {
-   printk("pca9535 NAND Switch expander set up\n");
+   unsigned num = gpio + (intptr_t)context;
+
+   at91_set_GPIO_periph(AT91_PIN_PC10, 0);
+   at91_set_GPIO_periph(AT91_PIN_PC14, 0);
+   if (gpio_request(num, "NAND CS Switch") >= 0) {
+      gpio_direction_output(num, 1);
+      printk("NAND Switched to alternate CS line\n");
+   }
+
    return 0;
 }
 
@@ -899,8 +908,8 @@ static void __init ek_board_init(void)
 
    // Select GPIO for NAND CS switch
    if (BOARD_REV_NUM > 6) {
-      printk("*** NAND CS on default\n");
-      at91_set_A_periph(AT91_PIN_PC14, 0);
+      // printk("*** NAND CS on default\n");
+      // at91_set_A_periph(AT91_PIN_PC14, 0);
       // at91_set_GPIO_periph(AT91_PIN_PC14, 1);
       // at91_set_deglitch(AT91_PIN_PC14, 1);
 #if 0
