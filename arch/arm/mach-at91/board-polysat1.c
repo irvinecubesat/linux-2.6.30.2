@@ -733,7 +733,7 @@ static int ax5042_setup_nandcs(struct i2c_client *client,
    at91_set_GPIO_periph(AT91_PIN_PC10, 0);
    at91_set_GPIO_periph(AT91_PIN_PC14, 0);
    if (gpio_request(num, "NAND CS Switch") >= 0) {
-      gpio_direction_output(num, 1);
+      gpio_direction_output(num, 0);
       printk("NAND Switched to alternate CS line\n");
    }
 
