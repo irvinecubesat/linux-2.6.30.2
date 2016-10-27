@@ -85,6 +85,9 @@ obj-$(CONFIG_MACH_AT91EB01)	+= board-eb01.o
 # PolySat board-specific support
 obj-$(CONFIG_MACH_POLYSAT1) += board-polysat1.o
 
+# Irvine-01 C-Card support
+obj-$(CONFIG_MACH_IRV-01_C-CARD) += board-irv-01-c-card.o
+
 # Drivers
 obj-y				+= leds.o
 obj-$(CONFIG_FB_S1D13XXX)	+= ics1523.o
