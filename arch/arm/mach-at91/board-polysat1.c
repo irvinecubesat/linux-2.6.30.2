@@ -849,8 +849,10 @@ static void __init ek_board_init(void)
          // Enable 3v3 PL regulator for LS
          // Should be in a kernel module now!
          // at91_set_gpio_output(AT91_PIN_PC6, 1);
-         // at91_set_gpio_output(AT91_PIN_PC7, 1);
-         printk("\n *** 3v3 and 5V0 PL disabled\n\r");
+     // enable  5V0 PL power by default
+     at91_set_gpio_output(AT91_PIN_PC7, 1);
+     printk("\n *** 5V0 PL enabled\n");
+     printk("\n *** 3v3 PL disabled\n");
       //}
 	   at91_add_device_i2c(ek_i2c_devices_rev3, ARRAY_SIZE(ek_i2c_devices_rev3));
 
