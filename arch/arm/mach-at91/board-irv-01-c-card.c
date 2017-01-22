@@ -31,7 +31,7 @@
 #include <../mach-at91/generic.h>
 
 
-#define DBB_EXPANDER_BASE 296
+#define IRV_CCARD_EXPANDER_BASE 296
 
 
 /**
@@ -75,8 +75,8 @@ int pcf857x_setup(struct i2c_client *client,
   return result;
 }
 
-static struct pcf857x_platform_data dbb_expander_plat_data = {
-   .gpio_base = DBB_EXPANDER_BASE,
+static struct pcf857x_platform_data irv_ccard_expander_plat_data = {
+   .gpio_base = IRV_CCARD_EXPANDER_BASE,
    .setup = pcf857x_setup,
    .n_latch=0
 };
@@ -86,25 +86,25 @@ struct i2c_info {
    struct i2c_client *client;
 };
 
-static struct i2c_info i2c_dbb_devices[] = {
+static struct i2c_info i2c_irv_ccard_devices[] = {
    {
       .client = NULL,
       .board_info = {
          I2C_BOARD_INFO("tca9554a", 0x38),
-         .platform_data = &dbb_expander_plat_data,
+         .platform_data = &irv_ccard_expander_plat_data,
       }
    },
 };
-#define NUM_DBB_I2C_DEVICES (sizeof(i2c_dbb_devices) / sizeof(i2c_dbb_devices[0]))
+#define NUM_IRV_CCARD_I2C_DEVICES (sizeof(i2c_irv_ccard_devices) / sizeof(i2c_irv_ccard_devices[0]))
 
 static void __exit cleanup_board(void)
 {
    int i;
-   for (i=0; i <NUM_DBB_I2C_DEVICES; i++)
+   for (i=0; i <NUM_IRV_CCARD_I2C_DEVICES; i++)
      {
-       if (i2c_dbb_devices[i].client) {
-         i2c_unregister_device(i2c_dbb_devices[i].client);
-         i2c_dbb_devices[i].client = NULL;
+       if (i2c_irv_ccard_devices[i].client) {
+         i2c_unregister_device(i2c_irv_ccard_devices[i].client);
+         i2c_irv_ccard_devices[i].client = NULL;
        }
      }
 }
@@ -116,16 +116,17 @@ static int __init setup_board(void)
 
    adap = i2c_get_adapter(1);
    if (!adap) {
-      printk("No dbb i2c bus adapter!\n");
+      printk("No irv_ccard i2c bus adapter!\n");
       return -1;
    }
+   printk("Registering irv_ccard i2c bus adapter\n");
 
-   for (i = 0; i < NUM_DBB_I2C_DEVICES; i++) {
-      i2c_dbb_devices[i].client =
-                  i2c_new_device(adap, &i2c_dbb_devices[i].board_info);
+   for (i = 0; i < NUM_IRV_CCARD_I2C_DEVICES; i++) {
+      i2c_irv_ccard_devices[i].client =
+                  i2c_new_device(adap, &i2c_irv_ccard_devices[i].board_info);
 
-      if (NULL == i2c_dbb_devices[i].client) {
-         printk("Failed to register dbb i2c device %d!\n", i);
+      if (NULL == i2c_irv_ccard_devices[i].client) {
+         printk("Failed to register irv_ccard i2c device %d!\n", i);
          goto err;
       }
    }
