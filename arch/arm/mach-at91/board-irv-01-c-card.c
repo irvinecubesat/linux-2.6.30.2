@@ -30,6 +30,10 @@
 #include <../mach-at91/sam9_smc.h>
 #include <../mach-at91/generic.h>
 
+MODULE_DESCRIPTION("Irvine C Card Configuration module support for i2c expander");
+MODULE_AUTHOR("Maurice Ling");
+MODULE_LICENSE("GPL");
+
 
 #define IRV_CCARD_EXPANDER_BASE 296
 
