@@ -362,7 +362,7 @@ config MACH_POLYSAT1
 	  Select this if you are using a PolySat version 1 avionics board.
 
 config MACH_IRV-01_C-CARD
-       bool "Irvine-01 C-Card"
+       tristate "Irvine-01 C-Card"
        depends on ARCH_AT91SAM9G20
        help
 	 Select this to support the Irvine-01 C-Card
