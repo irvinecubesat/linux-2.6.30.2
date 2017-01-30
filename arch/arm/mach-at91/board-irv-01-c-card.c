@@ -34,7 +34,11 @@ MODULE_DESCRIPTION("Irvine C Card Configuration module support for i2c expander"
 MODULE_AUTHOR("Maurice Ling");
 MODULE_LICENSE("GPL");
 
-
+/**
+ * i2c address
+ **/
+#define IRV_CCARD_EXPANDER_I2CADDR 0x38
+#define IRV_CCARD_EXPANDER_I2CBUS 1
 #define IRV_CCARD_EXPANDER_BASE 296
 
 
@@ -68,6 +72,7 @@ int pcf857x_setup(struct i2c_client *client,
 	{
 	  setValue=0;
 	}
+      printk("Configuring GPIO %d to %d", i, setValue);
       status=gpio_direction_output(gpio, setValue);
       if (status != 0)
 	{
@@ -94,7 +99,7 @@ static struct i2c_info i2c_irv_ccard_devices[] = {
    {
       .client = NULL,
       .board_info = {
-         I2C_BOARD_INFO("tca9554a", 0x38),
+         I2C_BOARD_INFO("tca9554", IRV_CCARD_EXPANDER_I2CADDR),
          .platform_data = &irv_ccard_expander_plat_data,
       }
    },
@@ -107,6 +112,7 @@ static void __exit cleanup_board(void)
    for (i=0; i <NUM_IRV_CCARD_I2C_DEVICES; i++)
      {
        if (i2c_irv_ccard_devices[i].client) {
+	 printk("Unregistering i2c_irv device %d", i);
          i2c_unregister_device(i2c_irv_ccard_devices[i].client);
          i2c_irv_ccard_devices[i].client = NULL;
        }
@@ -118,7 +124,7 @@ static int __init setup_board(void)
    int i=0;
    struct i2c_adapter *adap = NULL;
 
-   adap = i2c_get_adapter(1);
+   adap = i2c_get_adapter(IRV_CCARD_EXPANDER_I2CBUS);
    if (!adap) {
       printk("No irv_ccard i2c bus adapter!\n");
       return -1;
