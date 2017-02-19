@@ -58,35 +58,37 @@ MODULE_LICENSE("GPL");
  * MT03_EN     P6    302 <--- set low at initialization
  * DSA_EN_BAR  P7    303
  **/
-int pcf857x_setup(struct i2c_client *client,
+int tca9554_setup(struct i2c_client *client,
 		    int gpio, unsigned ngpio,
 		    void *context)
 {
   int result=0;
   int i = gpio;
-  for (i = gpio; i < ngpio; i++)
+
+  printk("Setting up irv-01 C card with %d gpio\n", ngpio);
+  for (i = gpio; i < gpio+ngpio; i++)
+  {
+    int setValue=1;
+    int status=0;
+    if (i >=300 && i <= 302)	/* MT01-03 should be turned off to start*/
     {
-      int setValue=1;
-      int status=0;
-      if (i >=300 && i <= 302)	/* MT01-03 should be turned off to start*/
-	{
-	  setValue=0;
-	}
-      printk("Configuring GPIO %d to %d", i, setValue);
-      status=gpio_direction_output(gpio, setValue);
-      if (status != 0)
-	{
-	  dev_err(&client->dev, "Error %d setting gpio %d to output\n",
-		  status, i);
-	  result=-1;
-	}
+      setValue=0;
     }
+    printk("Configuring GPIO %d to %d\n", i, setValue);
+    status=gpio_direction_output(gpio, setValue);
+    if (status != 0)
+    {
+      dev_err(&client->dev, "Error %d setting gpio %d to output\n",
+              status, i);
+      result=-1;
+    }
+  }
   return result;
 }
 
 static struct pcf857x_platform_data irv_ccard_expander_plat_data = {
    .gpio_base = IRV_CCARD_EXPANDER_BASE,
-   .setup = pcf857x_setup,
+   .setup = tca9554_setup,
    .n_latch=0
 };
 

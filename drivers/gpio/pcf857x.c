@@ -17,6 +17,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
+#define DEBUG
 
 #include <linux/kernel.h>
 #include <linux/slab.h>
@@ -188,6 +189,7 @@ static int pcf857x_probe(struct i2c_client *client,
 	struct pcf857x			*gpio;
 	int				status;
 
+    dev_dbg(&client->dev, "Probing i2c client...\n");
 	pdata = client->dev.platform_data;
 	if (!pdata) {
 		dev_dbg(&client->dev, "no platform data\n");
@@ -201,6 +203,7 @@ static int pcf857x_probe(struct i2c_client *client,
 
 	mutex_init(&gpio->lock);
 
+    dev_dbg(&client->dev, "chip base is %d\n", pdata->gpio_base);
 	gpio->chip.base = pdata->gpio_base;
 	gpio->chip.can_sleep = 1;
 	gpio->chip.dev = &client->dev;
@@ -219,6 +222,7 @@ static int pcf857x_probe(struct i2c_client *client,
 	 */
 	gpio->chip.ngpio = id->driver_data;
 	if (gpio->chip.ngpio == 8) {
+      dev_dbg(&client->dev, "8 gpios\n");
 		gpio->chip.direction_input = pcf857x_input8;
 		gpio->chip.get = pcf857x_get8;
 		gpio->chip.direction_output = pcf857x_output8;
@@ -230,7 +234,10 @@ static int pcf857x_probe(struct i2c_client *client,
 
 		/* fail if there's no chip present */
 		else
+        {
 			status = i2c_smbus_read_byte(client);
+            dev_dbg(&client->dev, "i2c smbus_read_byte (Status %d)\n", status);
+        }
 
 	/* '75/'75c addresses are 0x20..0x27, just like the '74;
 	 * the '75c doesn't have a current source pulling high.
