@@ -850,7 +850,6 @@ static void __init ek_board_init(void)
          // Should be in a kernel module now!
          // at91_set_gpio_output(AT91_PIN_PC6, 1);
          //at91_set_gpio_output(AT91_PIN_PC7, 1);
-      printk("\n *** 5V0 3v3 PL disabled\n");
       //}
 	   at91_add_device_i2c(ek_i2c_devices_rev3, ARRAY_SIZE(ek_i2c_devices_rev3));
 
@@ -1011,7 +1010,11 @@ static void __init ek_board_init(void)
    // Set GPIO pins into GPIO and known state.
    at91_set_gpio_output(AT91_PIN_PA29, 0);
    at91_set_gpio_output(AT91_PIN_PB16, 0);
-   at91_set_gpio_output(AT91_PIN_PC6, 1);
+   //
+   // Disable PL 3V3 payload
+   // 
+   printk("\n *** 3v3 PL disabled\n");
+   at91_set_gpio_output(AT91_PIN_PC6, 0);
    at91_set_gpio_output(AT91_PIN_PC7, 0);
 
    // Payload I2C device 
